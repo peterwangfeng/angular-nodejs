@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>登录注册</title>
+    <script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+    <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.css">
+    <script src="libs/jquery/dist/jquery.js"></script>
+    <script src="libs/bootstrap/js/bootstrap.js"></script>
+</head>
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+    }
+
+    body {
+        height: 100%;
+        background-image: url("img/bg.jpg");
+        background-size: cover;
+        overflow: hidden;
+        font-size: 62.5%;
+        position: relative;
+    }
+
+    section {
+        width: 500px;
+        height: 300px;
+        /*border: 1px solid red;*/
+        margin: 280px auto;
+        background-color: lightblue;
+        box-shadow: 5px 5px 10px blue;
+        border-radius: 10px;
+    }
+
+    h1 {
+        font-size: 5em;
+        text-align: center;
+        letter-spacing: 5px;
+        padding-top:20px;
+        font-weight: 800;
+    }
+
+    main {
+        /*border: 1px solid green;*/
+        margin: 20px auto;
+        padding: 10px 0;
+    }
+
+    main form {
+        margin-left: 60px;
+    }
+
+    main label {
+        font-size: 3em;
+        font-weight: bolder;
+        /*vertical-align: text-bottom;*/
+    }
+
+    main input {
+        width: 300px;
+        height: 30px;
+        border: none;
+        margin: 10px 0;
+    }
+    .abtn{
+        text-align: center;
+        margin:20px auto;
+    }
+    .abtn button{
+        width: 180px;
+        height: 40px;
+        font-size: 3em;
+        /*opacity: 0.6;*/
+    }
+
+    .modal-body{
+        /*background-color: #FAFF8C;*/
+
+    }
+    .modal-body form{
+        height: 200px;
+        margin-top: 50px;
+    }
+    .modal-body form label{
+        font-size: 3em;
+        margin-left: 50px;
+    }
+    .modal-body form input{
+        width: 300px;
+        height: 30px;
+        float:right;
+        position: relative;
+        left: -100px;
+        border:none;
+    }
+</style>
+
+<body>
+<section class="box">
+    <div class="title">
+        <span></span>
+        <h1>会员信息管理系统</h1>
+    </div>
+    <main>
+        <form id="login">
+            <label >用户&nbsp;&nbsp;</label>
+            <input type="text" name="username"><br>
+            <label >密码&nbsp;&nbsp;</label>
+            <input type="text" name="password">
+            <div class="abtn">
+                <button class="login btn btn-success" type="submit">登录</button>
+                <button type="button" class="register btn btn-info " data-toggle="modal" data-target="#myModal">注册</button>
+            </div>
+        </form>
+    </main>
+</section>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <form action="" id="reg">
+                    <label for="user">用户名:</label>
+                    <input type="text" name="username" id="user" placeholder="请输入用户名"><br>
+                    <label for="paw1">密码:</label>
+                    <input type="text" name="password" id="paw1" placeholder="请输入密码"><br>
+                    <input type="submit" value="注册" class="btn btn-primary">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--******************************-->
+</body>
+
+</html>
+<script>
+    $('#reg').submit(function (ev) {
+        ev.preventDefault();
+        var data = $(this).serialize();
+        $.post('/api/register', data, function (res) {
+            $('.modal-body').text(res.msg);
+            $('#myModal').modal('show').on('hidden.bs.modal', function (e) {
+                if (res.code === 'success') {
+                    location.reload();
+                }
+            })
+        })
+    });
+    $('#login').submit(function (ev) {
+        ev.preventDefault();
+        var data = $(this).serialize();
+        $.post('/api/login', data, function (res) {
+            $('.modal-body').text(res.msg);
+            $('#myModal').modal('show').on('hidden.bs.modal', function (e) {
+                if (res.code === 'success') {
+                    location.href = 'admin.html'
+                }
+            })
+        })
+    })
+</script>
